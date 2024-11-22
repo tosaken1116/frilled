@@ -15,8 +15,8 @@ resource "google_cloudbuild_trigger" "build_trigger" {
   name = "build-sfu-token-server"
 
   github {
-    owner       = var.github_owner
-    name        = var.github_repo
+    owner = var.github_owner
+    name  = var.github_repo
     push {
       branch = "^main$" # main ブランチがプッシュされたときにトリガー
     }
@@ -79,28 +79,3 @@ resource "google_cloud_run_service_iam_member" "invoker" {
   member   = "allUsers"
 }
 
-output "cloud_run_url" {
-  description = "Cloud Run サービスの URL"
-  value       = google_cloud_run_service.sfu_token_server.status[0].url
-}
-
-variable "project_id" {
-  description = "GCP プロジェクト ID"
-  type        = string
-}
-
-variable "region" {
-  description = "GCP リージョン"
-  type        = string
-  default     = "us-central1"
-}
-
-variable "github_owner" {
-  description = "GitHub リポジトリのオーナー"
-  type        = string
-}
-
-variable "github_repo" {
-  description = "GitHub リポジトリ名"
-  type        = string
-}
