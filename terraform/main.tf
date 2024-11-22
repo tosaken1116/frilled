@@ -3,31 +3,7 @@ provider "google" {
   region  = var.region
 }
 
-resource "google_artifact_registry_repository" "docker_repo" {
-  repository_id = "sfu-token-server"
-  format        = "DOCKER"
-  location      = var.region
-}
 
-
-resource "google_cloudbuild_trigger" "build_trigger" {
-  name = "build-sfu-token-server"
-
-  github {
-    owner = var.github_owner
-    name  = var.github_repo
-    push {
-      branch = "^main$"
-    }
-  }
-
-  filename = "server/sfu-token-server/cloudbuild.yaml"
-  substitutions = {
-    _REGION                         = var.region
-    _ARTIFACT_REPOSITORY_IMAGE_NAME = "${var.region}-docker.pkg.dev/${var.project_id}/artifact-registry-nextjs-gcp-sample-app/console"
-  }
-
-}
 
 resource "google_cloud_run_service" "sfu_token_server" {
   name     = "sfu-token-server"
@@ -36,7 +12,7 @@ resource "google_cloud_run_service" "sfu_token_server" {
   template {
     spec {
       containers {
-        image = "${var.region}-docker.pkg.dev/${var.project_id}/${google_artifact_registry_repository.docker_repo.repository_id}/sfu-token-server:latest"
+        image = "${var.region}-docker.pkg.dev/${var.project_id}/sfu_token_server/sfu-token-server:latest"
         ports {
           container_port = 8080
         }
