@@ -8,6 +8,7 @@ steps:
         "-f",
         "Dockerfile",
       ]
+    dir: "server/sfu-token-server"
 images:
   - "gcr.io/frilled/github.com/tosaken1116/frilled:$COMMIT_SHA"
 
