@@ -3,6 +3,8 @@ package main
 import (
 	"fmt"
 	"net/http"
+
+	"github.com/labstack/echo/v4"
 )
 
 func healthCheckHandler(w http.ResponseWriter, r *http.Request) {
@@ -10,9 +12,11 @@ func healthCheckHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
-	http.HandleFunc("/health", healthCheckHandler)
-	fmt.Println("Starting server on :8080")
-	if err := http.ListenAndServe(":8080", nil); err != nil {
-		fmt.Println("Failed to start server:", err)
-	}
+	app := echo.New()
+
+	app.GET("/health", func(c echo.Context) error {
+		return c.String(http.StatusOK, "OK")
+	})
+
+	app.Logger.Fatal(app.Start(":8080"))
 }
