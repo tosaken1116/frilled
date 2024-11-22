@@ -12,19 +12,12 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+      - uses: google-github-actions/auth@v0
+        with:
+          workload_identity_provider: "projects/${{secrets.PROJECT_NUMBER}}/locations/global/workloadIdentityPools/${{secrets.POOL_ID}}/providers/${{secrets.PROVIDER_ID}}"
+          service_account: "${{secrets.GCP_SA_EMAIL}}"
 
       - uses: hashicorp/setup-terraform@v2
-        with:
-          terraform_version: 1.4.6
-
-      - name: credentials.json の作成
-        run: |
-          mkdir -p ./terraform
-          echo "${{ secrets.GCP_SA_KEY }}" > ./terraform/credentials.json
-          ls -la ./terraform
-
-      - name: credentials.json の存在確認
-        run: test -f ./terraform/credentials.json
 
       - name: Terraform init
         working-directory: ./terraform
