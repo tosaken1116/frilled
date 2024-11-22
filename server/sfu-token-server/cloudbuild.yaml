@@ -2,11 +2,10 @@ steps:
   - name: "gcr.io/cloud-builders/docker"
     args:
       [
+        cd server/sfu-token-server,
         "build",
         "-t",
         "gcr.io/frilled/github.com/tosaken1116/frilled:$COMMIT_SHA",
-        "-f",
-        "server/sfu-token-server/Dockerfile",
         ".",
       ]
 images:
