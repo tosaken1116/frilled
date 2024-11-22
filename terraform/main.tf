@@ -2,11 +2,7 @@ provider "google" {
   project = var.project_id
   region  = var.region
 }
-resource "google_service_account" "cloudbuild_service_account" {
-  account_id   = "cloudbuild-sa"
-  display_name = "cloudbuild-sa"
-  description  = "Cloud build service account"
-}
+
 resource "google_artifact_registry_repository" "docker_repo" {
   repository_id = "sfu-token-server"
   format        = "DOCKER"
