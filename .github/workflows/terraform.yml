@@ -10,17 +10,21 @@ jobs:
     name: "Terraform Apply"
     runs-on: ubuntu-latest
 
-    permissions:
-      contents: read
-      id-token: write
-
     steps:
       - uses: actions/checkout@v4
 
-      - name: Terraform Setup
-        uses: hashicorp/setup-terraform@v2
+      - uses: hashicorp/setup-terraform@v2
         with:
-          terraform_version: 1.9.8
+          terraform_version: 1.4.6
+
+      - name: credentials.json の作成
+        run: |
+          mkdir -p ./terraform
+          echo "${{ secrets.GCP_SA_KEY }}" > ./terraform/credentials.json
+          ls -la ./terraform
+
+      - name: credentials.json の存在確認
+        run: test -f ./terraform/credentials.json
 
       - name: Terraform init
         working-directory: ./terraform
