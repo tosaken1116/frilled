@@ -24,7 +24,6 @@ resource "google_cloudbuild_trigger" "build_trigger" {
       branch = "^main$"
     }
   }
-  service_account = google_service_account.cloudbuild_service_account.id
 
   filename = "server/sfu-token-server/cloudbuild.yaml"
   substitutions = {
