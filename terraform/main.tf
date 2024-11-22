@@ -5,7 +5,7 @@ provider "google" {
 
 # Artifact Registry を作成
 resource "google_artifact_registry_repository" "docker_repo" {
-  name     = "sfu-token-server"
+  repository_id = "sfu-token-server"
   format   = "DOCKER"
   location = var.region
 }
