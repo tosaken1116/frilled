@@ -27,7 +27,7 @@ resource "google_cloudbuild_trigger" "build_trigger" {
       name = "gcr.io/cloud-builders/docker"
       args = [
         "build", "-t",
-        "LOCATION-docker.pkg.dev/${var.project_id}/sfu-token-server/sfu-token-server:latest",
+        "${var.region}-docker.pkg.dev/${var.project_id}/sfu-token-server/sfu-token-server:latest",
         "./server/sfu-token-server"
       ]
     }
@@ -35,11 +35,11 @@ resource "google_cloudbuild_trigger" "build_trigger" {
       name = "gcr.io/cloud-builders/docker"
       args = [
         "push",
-        "LOCATION-docker.pkg.dev/${var.project_id}/sfu-token-server/sfu-token-server:latest"
+        "${var.region}-docker.pkg.dev/${var.project_id}/sfu-token-server/sfu-token-server:latest"
       ]
     }
     images = [
-      "LOCATION-docker.pkg.dev/${var.project_id}/sfu-token-server/sfu-token-server:latest"
+      "${var.region}-docker.pkg.dev/${var.project_id}/sfu-token-server/sfu-token-server:latest"
     ]
   }
 }
@@ -53,7 +53,7 @@ resource "google_cloud_run_service" "sfu_token_server" {
   template {
     spec {
       containers {
-        image = "LOCATION-docker.pkg.dev/${var.project_id}/${google_artifact_registry_repository.docker_repo.name}/sfu-token-server:latest"
+        image = "${var.region}-docker.pkg.dev/${var.project_id}/${google_artifact_registry_repository.docker_repo.name}/sfu-token-server:latest"
         ports {
           container_port = 8080
         }
