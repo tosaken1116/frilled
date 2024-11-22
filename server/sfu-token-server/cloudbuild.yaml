@@ -1,0 +1,16 @@
+steps:
+  - name: "gcr.io/cloud-builders/docker"
+    args:
+      [
+        "build",
+        "-t",
+        "gcr.io/frilled/github.com/tosaken1116/frilled:$COMMIT_SHA",
+        "-f",
+        "Dockerfile",
+      ]
+images:
+  - "gcr.io/frilled/github.com/tosaken1116/frilled:$COMMIT_SHA"
+
+timeout: 500s
+options:
+  logging: CLOUD_LOGGING_ONLY
