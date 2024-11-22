@@ -9,7 +9,3 @@ variable "region" {
   default     = "us-central1"
 }
 
-variable "credentials_file" {
-  description = "GCP サービスアカウントキーのパス"
-  type        = string
-}
