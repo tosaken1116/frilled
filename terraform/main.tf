@@ -7,23 +7,12 @@ resource "google_service_account" "cloudbuild_service_account" {
   display_name = "cloudbuild-sa"
   description  = "Cloud build service account"
 }
-
-resource "google_project_iam_member" "act_as" {
-  project = var.project_id
-  role    = "roles/iam.serviceAccountUser"
-  member  = "serviceAccount:${google_service_account.cloudbuild_service_account.email}"
-}
-
-resource "google_project_iam_member" "logs_writer" {
-  project = var.project_id
-  role    = "roles/logging.logWriter"
-  member  = "serviceAccount:${google_service_account.cloudbuild_service_account.email}"
-}
 resource "google_artifact_registry_repository" "docker_repo" {
   repository_id = "sfu-token-server"
   format        = "DOCKER"
   location      = var.region
 }
+
 
 resource "google_cloudbuild_trigger" "build_trigger" {
   name = "build-sfu-token-server"
@@ -37,26 +26,12 @@ resource "google_cloudbuild_trigger" "build_trigger" {
   }
   service_account = google_service_account.cloudbuild_service_account.id
 
-  build {
-    step {
-      name = "gcr.io/cloud-builders/docker"
-      args = [
-        "build", "-t",
-        "${var.region}-docker.pkg.dev/${var.project_id}/sfu-token-server/sfu-token-server:latest",
-        "../server/sfu-token-server"
-      ]
-    }
-    step {
-      name = "gcr.io/cloud-builders/docker"
-      args = [
-        "push",
-        "${var.region}-docker.pkg.dev/${var.project_id}/sfu-token-server/sfu-token-server:latest"
-      ]
-    }
-    images = [
-      "${var.region}-docker.pkg.dev/${var.project_id}/sfu-token-server/sfu-token-server:latest"
-    ]
+  filename = "server/sfu-token-server/cloudbuild.yaml"
+  substitutions = {
+    _REGION                         = var.region
+    _ARTIFACT_REPOSITORY_IMAGE_NAME = "${var.region}-docker.pkg.dev/${var.project_id}/artifact-registry-nextjs-gcp-sample-app/console"
   }
+
 }
 
 resource "google_cloud_run_service" "sfu_token_server" {
@@ -81,6 +56,13 @@ resource "google_cloud_run_service" "sfu_token_server" {
   traffic {
     percent         = 100
     latest_revision = true
+  }
+  lifecycle {
+    ignore_changes = [
+      client,
+      client_version,
+      template[0].containers[0].image,
+    ]
   }
 }
 
