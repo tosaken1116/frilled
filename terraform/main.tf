@@ -6,8 +6,8 @@ provider "google" {
 # Artifact Registry を作成
 resource "google_artifact_registry_repository" "docker_repo" {
   repository_id = "sfu-token-server"
-  format   = "DOCKER"
-  location = var.region
+  format        = "DOCKER"
+  location      = var.region
 }
 
 # Cloud Build Trigger
@@ -18,17 +18,16 @@ resource "google_cloudbuild_trigger" "build_trigger" {
     owner = var.github_owner
     name  = var.github_repo
     push {
-      branch = "^main$" # main ブランチがプッシュされたときにトリガー
+      branch = "^main$"
     }
   }
 
-  # Cloud Build 設定
   build {
     step {
       name = "gcr.io/cloud-builders/docker"
       args = [
         "build", "-t",
-        "LOCATION-docker.pkg.dev/${var.project_id}/${google_artifact_registry_repository.docker_repo.name}/sfu-token-server:latest",
+        "LOCATION-docker.pkg.dev/${var.project_id}/sfu-token-server/sfu-token-server:latest",
         "./server/sfu-token-server"
       ]
     }
@@ -36,14 +35,15 @@ resource "google_cloudbuild_trigger" "build_trigger" {
       name = "gcr.io/cloud-builders/docker"
       args = [
         "push",
-        "LOCATION-docker.pkg.dev/${var.project_id}/${google_artifact_registry_repository.docker_repo.name}/sfu-token-server:latest"
+        "LOCATION-docker.pkg.dev/${var.project_id}/sfu-token-server/sfu-token-server:latest"
       ]
     }
     images = [
-      "LOCATION-docker.pkg.dev/${var.project_id}/${google_artifact_registry_repository.docker_repo.name}/sfu-token-server:latest"
+      "LOCATION-docker.pkg.dev/${var.project_id}/sfu-token-server/sfu-token-server:latest"
     ]
   }
 }
+
 
 # Cloud Run サービスを作成
 resource "google_cloud_run_service" "sfu_token_server" {
