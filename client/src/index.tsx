@@ -1,5 +1,4 @@
 import { Hono } from "hono";
-import { serveStatic } from "hono/bun";
 import { renderToString } from "react-dom/server";
 
 const app = new Hono();

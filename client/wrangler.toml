@@ -1,5 +1,5 @@
 name = "client"
-main = "./src/server.tsx"
+main = "./src/index.tsx"
 compatibility_date = "2024-11-23"
 assets = { directory = "./dist"}
 
