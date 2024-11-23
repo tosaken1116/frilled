@@ -29,7 +29,7 @@ jobs:
       - uses: cloudflare/wrangler-action@v3
         with:
           workingDirectory: client
-          apiToken: ${{ secrets.CF_API_TOKEN }}
-          accountId: ${{ secrets.CF_ACCOUNT_ID }}
+          apiToken: ${{ secrets.CF_DEPLOY_API_TOKEN }}
+          accountId: ${{ secrets.CF_DEPLOY_ACCOUNT_ID }}
       - name: publish
         run: pnpm run deploy
