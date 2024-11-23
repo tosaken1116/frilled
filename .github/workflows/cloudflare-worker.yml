@@ -1,0 +1,32 @@
+name: Deploy
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "client/**"
+
+defaults:
+  run:
+    working-directory: ./client
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    name: Deploy
+    steps:
+      - uses: actions/checkout@v3
+      - uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CF_API_TOKEN }}
+          accountId: ${{ secrets.CF_ACCOUNT_ID }}
+      - name: setup node with pnpm
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "pnpm"
+      - name: install dependencies
+        run: pnpm install
+      - name: build
+        run: pnpm build
+      - name: publish
+        run: pnpm run deploy
