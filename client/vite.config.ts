@@ -22,7 +22,6 @@ export default defineConfig(({ mode }) => {
           },
         },
       },
-      plugins: [TanStackRouterVite()],
       css: {
         postcss: {
           plugins: [tailwindcss()],
@@ -35,6 +34,8 @@ export default defineConfig(({ mode }) => {
         external: ["react", "react-dom"],
       },
       plugins: [
+        TanStackRouterVite(),
+
         build({
           outputDir: "server-build",
         }),

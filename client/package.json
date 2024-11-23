@@ -8,6 +8,7 @@
     "deploy": "$npm_execpath run build && wrangler deploy server-build/index.js"
   },
   "dependencies": {
+    "@livekit/components-react": "^2.6.9",
     "@react-three/drei": "^9.117.3",
     "@react-three/fiber": "^8.17.10",
     "@tanstack/react-router": "^1.82.2",

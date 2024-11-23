@@ -1,6 +1,18 @@
 import { initializeApp } from "firebase/app";
-import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
-import { createContext, ReactNode, useContext, useState } from "react";
+import {
+  getAuth,
+  GoogleAuthProvider,
+  onAuthStateChanged,
+  signInWithPopup,
+  User,
+} from "firebase/auth";
+import {
+  createContext,
+  ReactNode,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
@@ -18,12 +30,14 @@ const provider = new GoogleAuthProvider();
 type AuthContextType = {
   userId: string | null;
   token: string | null;
-  setCurrentUser: (userId: string, token: string) => void;
+  userName: string | null;
+  setCurrentUser: (user: User) => void;
 };
 
 const AuthContext = createContext<AuthContextType>({
   userId: null,
   token: null,
+  userName: null,
   setCurrentUser: () => {},
 });
 
@@ -32,15 +46,27 @@ type AuthProviderProps = {
 };
 
 export const AuthProvider = ({ children }: AuthProviderProps) => {
-  const [userId, setUserId] = useState<string | null>(null);
-  const [token, setToken] = useState<string | null>(null);
-  const setCurrentUser = (userId: string, token: string) => {
-    setUserId(userId);
-    setToken(token);
+  const [user, setUser] = useState<User | null>(null);
+  const setCurrentUser = (user: User) => {
+    setUser(user);
   };
 
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      setUser(user);
+    });
+
+    return () => unsubscribe();
+  }, []);
   return (
-    <AuthContext.Provider value={{ userId, token, setCurrentUser }}>
+    <AuthContext.Provider
+      value={{
+        userId: user?.uid ?? null,
+        token: user?.refreshToken ?? null,
+        userName: user?.displayName ?? null,
+        setCurrentUser,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );
@@ -55,11 +81,11 @@ export const PrivateRoute = ({ children }: { children: ReactNode }) => {
 };
 
 export const useAuth = () => {
-  const { userId, token } = useContext(AuthContext);
-  return { userId, token };
+  const { userId, token, userName } = useContext(AuthContext);
+  return { userId, token, userName };
 };
 
-export const useSignin = async () => {
+export const useSignin = () => {
   const { setCurrentUser } = useContext(AuthContext);
   const signinWithGoogle = async () => {
     const result = await signInWithPopup(auth, provider);
@@ -67,8 +93,7 @@ export const useSignin = async () => {
     if (user === null) {
       return;
     }
-    const token = await user.getIdToken();
-    setCurrentUser(user.uid, token);
+    setCurrentUser(user);
   };
   return { signinWithGoogle };
 };

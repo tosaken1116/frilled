@@ -1,8 +1,14 @@
-import { CreateRoomResponse, ListRoomResponse } from "../types";
+import {
+  CreateRoomResponse,
+  GetTokenRequest,
+  GetTokenResponse,
+  ListRoomResponse,
+} from "../types";
 
 type RoomRepository = {
   createRoom: () => Promise<CreateRoomResponse>;
   listRoom: () => Promise<ListRoomResponse>;
+  getToken: (request: GetTokenRequest) => Promise<GetTokenResponse>;
 };
 export const useRoomRepository = (): RoomRepository => {
   const createRoom = async () => {
@@ -29,8 +35,30 @@ export const useRoomRepository = (): RoomRepository => {
     };
   };
 
+  const getToken = async (
+    request: GetTokenRequest
+  ): Promise<GetTokenResponse> => {
+    const { roomId, userName } = request;
+    try {
+      const res = await fetch(
+        `${import.meta.env.VITE_SFU_TOKEN_API_URL}/getToken?room=${roomId}&name=${userName}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      return { token: await res.text() };
+    } catch (e) {
+      console.error(e);
+    }
+    return { token: "" };
+  };
+
   return {
     createRoom,
     listRoom,
+    getToken,
   };
 };

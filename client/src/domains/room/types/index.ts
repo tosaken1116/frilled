@@ -12,3 +12,12 @@ export type Room = {
 export type ListRoomResponse = {
   rooms: Room[];
 };
+
+export type GetTokenRequest = {
+  roomId: string;
+  userName: string;
+};
+
+export type GetTokenResponse = {
+  token: string;
+};
