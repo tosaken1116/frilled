@@ -4,7 +4,7 @@ FROM golang:${GO_VERSION}
 WORKDIR /app
 
 # from project root to server/sfu-token-server
-COPY server/sfu-token-server .
+COPY . .
 
 RUN go mod tidy
 
