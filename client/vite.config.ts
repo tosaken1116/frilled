@@ -1,6 +1,7 @@
 import build from "@hono/vite-build/cloudflare-workers";
 import devServer from "@hono/vite-dev-server";
 import adapter from "@hono/vite-dev-server/cloudflare";
+import { TanStackRouterVite } from "@tanstack/router-plugin/vite";
 import { defineConfig } from "vite";
 
 export default defineConfig(({ mode }) => {
@@ -8,9 +9,9 @@ export default defineConfig(({ mode }) => {
     return {
       build: {
         rollupOptions: {
-          input: "./src/client.tsx",
-          output: {
-            entryFileNames: "static/client.js",
+          input: {
+            "./src/client.tsx": "static/client.js",
+            "/src/style.css": "static/assets/[name].[ext]",
           },
         },
       },
@@ -21,6 +22,7 @@ export default defineConfig(({ mode }) => {
         external: ["react", "react-dom"],
       },
       plugins: [
+        TanStackRouterVite(),
         build({
           outputDir: "server-build",
         }),

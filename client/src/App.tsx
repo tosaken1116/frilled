@@ -1,14 +1,12 @@
-import { Suspense } from "./components/ui/Suspense";
-import { CreateRoomButton } from "./domains/room/components/CreateRoomButton";
-import { RoomList } from "./domains/room/components/RoomList";
+import { createRouter, RouterProvider } from "@tanstack/react-router";
+import { StrictMode } from "react";
+import { routeTree } from "./routeTree.gen";
+const router = createRouter({ routeTree });
 
 export const App = () => {
   return (
-    <div>
-      <CreateRoomButton />
-      <Suspense>
-        <RoomList />
-      </Suspense>
-    </div>
+    <StrictMode>
+      <RouterProvider router={router} />
+    </StrictMode>
   );
 };
