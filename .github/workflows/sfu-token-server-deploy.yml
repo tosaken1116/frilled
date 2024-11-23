@@ -6,7 +6,7 @@ on:
       - main
     paths:
       - server/sfu-token-server/**/*.*
-      - ".github/workflows/sfu-token-server-deploy.yml"
+      - .github/workflows/sfu-token-server-deploy.yml
 env:
   IMAGE_NAME: sfu-token-server
   REPOSITORY: sfu-token-server
