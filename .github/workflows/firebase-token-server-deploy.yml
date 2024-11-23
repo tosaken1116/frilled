@@ -1,0 +1,55 @@
+name: firebase token server deploy
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - server/firebase-token-server/**/*.*
+      - .github/workflows/firebase-token-server-deploy.yml
+env:
+  IMAGE_NAME: firebase-token-server
+  REPOSITORY: firebase-token-server
+
+defaults:
+  run:
+    working-directory: ./server/firebase-token-server
+
+jobs:
+  deploy:
+    permissions:
+      contents: "read"
+      id-token: "write"
+    runs-on: ubuntu-latest
+    name: Deploy
+    steps:
+      - uses: actions/checkout@v4
+      - name: docker build
+        run: docker build -t firebase-token-server .
+      - uses: "google-github-actions/auth@v2"
+        with:
+          project_id: "${{secrets.PROJECT_ID}}"
+          workload_identity_provider: "projects/${{secrets.PROJECT_NUMBER}}/locations/global/workloadIdentityPools/${{secrets.POOL_ID}}/providers/${{secrets.PROVIDER_ID}}"
+          service_account: "${{secrets.GCP_SA_EMAIL}}"
+
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v2
+
+      - name: Configure docker for artifact registry
+        run: |
+          gcloud auth configure-docker ${{secrets.GCP_REGION}}-docker.pkg.dev
+
+      - name: Build
+        run: |
+          docker build -t ${{env.IMAGE_NAME}}:${{ github.sha }} .
+      - name: tag
+        run: |
+          docker tag ${{env.IMAGE_NAME}}:${{ github.sha }} ${{secrets.GCP_REGION}}-docker.pkg.dev/${{secrets.PROJECT_ID}}/${{env.REPOSITORY}}/${{env.IMAGE_NAME}}:${{ github.sha }}
+      - name: Push
+        run: |
+          docker push ${{secrets.GCP_REGION}}-docker.pkg.dev/${{secrets.PROJECT_ID}}/${{env.REPOSITORY}}/${{env.IMAGE_NAME}}:${{ github.sha }}
+      - uses: "google-github-actions/deploy-cloudrun@v2"
+        with:
+          image: ${{secrets.GCP_REGION}}-docker.pkg.dev/${{secrets.PROJECT_ID}}/${{env.REPOSITORY}}/${{env.IMAGE_NAME}}:${{ github.sha }}
+          service: ${{env.IMAGE_NAME}}
+          region: ${{secrets.GCP_REGION}}
