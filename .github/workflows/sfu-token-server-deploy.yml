@@ -53,5 +53,3 @@ jobs:
           image: ${{secrets.GCP_REGION}}-docker.pkg.dev/${{secrets.PROJECT_ID}}/${{env.REPOSITORY}}/${{env.IMAGE_NAME}}:${{ github.sha }}
           service: ${{env.IMAGE_NAME}}
           region: ${{secrets.GCP_REGION}}
-          env_vars: |
-            PORT=8080
