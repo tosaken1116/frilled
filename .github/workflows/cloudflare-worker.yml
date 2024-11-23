@@ -16,11 +16,6 @@ jobs:
     name: Deploy
     steps:
       - uses: actions/checkout@v3
-      - uses: cloudflare/wrangler-action@v3
-        with:
-          workingDirectory: client
-          apiToken: ${{ secrets.CF_API_TOKEN }}
-          accountId: ${{ secrets.CF_ACCOUNT_ID }}
       - name: setup node with pnpm
         uses: actions/setup-node@v4
         with:
@@ -30,5 +25,10 @@ jobs:
         run: pnpm install
       - name: build
         run: pnpm build
+      - uses: cloudflare/wrangler-action@v3
+        with:
+          workingDirectory: client
+          apiToken: ${{ secrets.CF_API_TOKEN }}
+          accountId: ${{ secrets.CF_ACCOUNT_ID }}
       - name: publish
         run: pnpm run deploy
