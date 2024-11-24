@@ -63,7 +63,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       value={{
         userId: user?.uid ?? null,
         token: user?.refreshToken ?? null,
-        userName: user?.displayName ?? null,
+        userName: user?.uid ?? null,
         setCurrentUser,
       }}
     >

@@ -1,7 +1,7 @@
 import { useFetch } from "../../../libs/fetcher";
 import { useAuth } from "../../../libs/firebase";
 import { useRoomRepository } from "../repository";
-import { generateRoomListKey } from "./key";
+import { generateHallObjectKey, generateRoomListKey } from "./key";
 
 export const useRoomList = () => {
   const repository = useRoomRepository();
@@ -16,4 +16,12 @@ export const useRoomToken = (roomId: string) => {
     repository.getToken({ userName: userName ?? "匿名", roomId })
   );
   return { token: data.token };
+};
+
+export const useHallObject = (roomId: string) => {
+  const repository = useRoomRepository();
+  const { data } = useFetch(generateHallObjectKey, () =>
+    repository.getHallObject({ roomId })
+  );
+  return data;
 };

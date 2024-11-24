@@ -21,3 +21,39 @@ export type GetTokenRequest = {
 export type GetTokenResponse = {
   token: string;
 };
+
+export type Object = {
+  href: string;
+  ext: string;
+  x: number;
+  y: number;
+  z: number;
+  xr: number;
+  yr: number;
+  zr: number;
+  scale: number;
+};
+
+type ServerObject = {
+  id: string;
+  ext: string;
+  x: number;
+  y: number;
+  z: number;
+  xr: number;
+  yr: number;
+  zr: number;
+  scale: number;
+};
+
+export type GetHallRequest = {
+  roomId: string;
+};
+
+export type GetHallRawResponse = {
+  objects: ServerObject[];
+};
+
+export type GetHallResponse = {
+  objects: Object[];
+};

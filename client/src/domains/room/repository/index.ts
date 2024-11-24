@@ -1,5 +1,7 @@
 import {
   CreateRoomResponse,
+  GetHallRequest,
+  GetHallResponse,
   GetTokenRequest,
   GetTokenResponse,
   ListRoomResponse,
@@ -9,6 +11,7 @@ type RoomRepository = {
   createRoom: () => Promise<CreateRoomResponse>;
   listRoom: () => Promise<ListRoomResponse>;
   getToken: (request: GetTokenRequest) => Promise<GetTokenResponse>;
+  getHallObject: (request: GetHallRequest) => GetHallResponse;
 };
 export const useRoomRepository = (): RoomRepository => {
   const createRoom = async () => {
@@ -56,9 +59,33 @@ export const useRoomRepository = (): RoomRepository => {
     return { token: "" };
   };
 
+  const getHallObject = ({ roomId }: GetHallRequest): GetHallResponse => {
+    const MAX = 20;
+    const COLUMN = 20;
+    return {
+      objects: Array.from({ length: COLUMN })
+        .map((_, j) =>
+          Array.from({ length: MAX - 3 }).map((_, i) => ({
+            ext: "glb",
+            href: "/chair.glb",
+            x: i * 2,
+            y: j * 1.5,
+            z: 0,
+            xr: 0,
+            yr: 0,
+            zr: 0,
+
+            scale: 0.1,
+          }))
+        )
+        .flat(),
+    };
+  };
+
   return {
     createRoom,
     listRoom,
     getToken,
+    getHallObject,
   };
 };
