@@ -23,11 +23,16 @@ type ListItemProps = {
   children: React.ReactNode;
   className?: string;
   as?: keyof JSX.IntrinsicElements;
-};
+} & React.HTMLAttributes<HTMLLIElement>;
 export const ListItem = ({
   children,
   className,
   as: Component = "li",
+  ...props
 }: ListItemProps) => {
-  return <Component className={className}>{children}</Component>;
+  return (
+    <Component className={className} {...props}>
+      {children}
+    </Component>
+  );
 };

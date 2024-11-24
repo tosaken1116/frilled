@@ -16,7 +16,7 @@ export const Loading = ({ className }: Props) => {
       stroke-width="2"
       stroke-linecap="round"
       stroke-linejoin="round"
-      class={clsx("lucide lucide-loader-circle", className)}
+      className={clsx("lucide lucide-loader-circle", className)}
     >
       <path d="M21 12a9 9 0 1 1-6.219-8.56" />
     </svg>

@@ -1,3 +1,4 @@
+import { useNavigate } from "@tanstack/react-router";
 import { initializeApp } from "firebase/app";
 import {
   getAuth,
@@ -87,6 +88,7 @@ export const useAuth = () => {
 
 export const useSignin = () => {
   const { setCurrentUser } = useContext(AuthContext);
+  const navigate = useNavigate();
   const signinWithGoogle = async () => {
     const result = await signInWithPopup(auth, provider);
     const { user } = result;
@@ -94,6 +96,12 @@ export const useSignin = () => {
       return;
     }
     setCurrentUser(user);
+    navigate({
+      to: "/rooms",
+      params: {
+        id: "1",
+      },
+    });
   };
   return { signinWithGoogle };
 };

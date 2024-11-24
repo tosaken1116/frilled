@@ -64,7 +64,7 @@ export const Internal = ({ children }: Props) => {
     setTimeout(() => {
       controlsRef.current?.reset();
       cameraRef.current?.lookAt(x + 10, y + 1, z + 2);
-    }, 400);
+    }, 250);
   };
 
   useFrame(() => {

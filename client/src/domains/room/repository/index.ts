@@ -17,22 +17,37 @@ export const useRoomRepository = (): RoomRepository => {
   const createRoom = async () => {
     return {
       id: "1",
-      token: "this is token",
+      token: "test room1",
     };
   };
 
   const listRoom = async () => {
+    await new Promise((resolve) => setTimeout(resolve, 1000));
     return {
       rooms: [
         {
-          title: "Room 1",
-          description: "This is room 1",
+          title: "test room 1",
+          description: "test room1",
           id: "1",
+          thumbnail: "/image1.png",
         },
         {
-          title: "Room 2",
-          description: "This is room 2",
+          title: "test room",
+          description: "test room2",
           id: "2",
+          thumbnail: "/image1.png",
+        },
+        {
+          title: "test room3",
+          description: "test room2",
+          id: "2",
+          thumbnail: "/image1.png",
+        },
+        {
+          title: "test room",
+          description: "test room2",
+          id: "2",
+          thumbnail: "/image1.png",
         },
       ],
     };

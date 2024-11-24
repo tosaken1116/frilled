@@ -10,7 +10,7 @@ export const Route = createRootRoute({
 function RootComponent() {
   return (
     <AuthProvider>
-      <div className=" min-w-full h-screen flex flex-col">
+      <div className=" min-w-full h-screen flex flex-col bg-black text-white">
         <Header />
         <main className="w-full h-full">
           <Outlet />

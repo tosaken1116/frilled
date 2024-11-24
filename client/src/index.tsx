@@ -7,6 +7,12 @@ app.get("*", (c) => {
     renderToString(
       <html>
         <head>
+          <link rel="preconnect" href="https://fonts.googleapis.com" />
+          <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+          <link
+            href="https://fonts.googleapis.com/css2?family=Dela+Gothic+One&display=swap"
+            rel="stylesheet"
+          />
           <meta charSet="utf-8" />
           <meta content="width=device-width, initial-scale=1" name="viewport" />
 

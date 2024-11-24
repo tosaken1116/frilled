@@ -1,8 +1,8 @@
 import { Box, Sphere, SpotLight } from "@react-three/drei";
 import { BackSide } from "three";
 import { Object } from "../../types";
-import { AnimationModel, UserModels } from "../UserModels";
 import { CurrentUser } from "../CurrentUser";
+import { UserModels } from "../UserModels";
 
 type Props = {
   roomId: string;
@@ -25,16 +25,16 @@ export const Hall = ({ roomId, ...props }: Props) => {
 const Stage = () => {
   return (
     <mesh position={[20, 0, 40]}>
-      <directionalLight intensity={0.7} castShadow />
       <mesh receiveShadow>
         <Box args={[20, 1, 10]} receiveShadow />
       </mesh>
       <SpotLight
         distance={5}
         angle={0}
+        position={[5, 5, 5]}
         attenuation={4}
-        anglePower={10}
-        color={"#0085a0"}
+        anglePower={100}
+        color={"#ff0000"}
       />
     </mesh>
   );

@@ -19,7 +19,10 @@ export const Button = ({
   return (
     <Component
       disabled={assertDisabled}
-      className={clsx("flex flex-col gap-2", className)}
+      className={clsx(
+        "flex flex-col font-bold gap-2 px-4 py-1 text-4xl border-white rounded-xl border-2",
+        className
+      )}
       {...props}
     >
       {isLoading && <Loading />}

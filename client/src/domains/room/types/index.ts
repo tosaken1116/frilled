@@ -7,6 +7,7 @@ export type Room = {
   title: string;
   description: string;
   id: string;
+  thumbnail: string;
 };
 
 export type ListRoomResponse = {
